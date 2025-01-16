@@ -33,6 +33,8 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Commit & push changes
         run: |
+          git config user.name 'GitHub - Update Submodules'
+          git config user.email 'cperez@mistercarwash.com'
           git add --all
           git commit -m "Update Submodules"
           git push
