@@ -1,32 +1,23 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Send updates to parent repo
-
-# Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: -main
   pull_request:
     branches: -main
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
   Update_parent_repo:
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
         with:
           submodules: true
 
-      # Runs a single command using the runners shell
+      # Pull latest changes from submodule
       - name: Pull & update submodules
         run: |
           git submodule update --init
@@ -37,6 +28,6 @@ jobs:
         run: |
           git config user.name 'GitHub - Update Submodules'
           git config user.email 'cperez@mistercarwash.com'
-          git add --all
-          git commit -m "Update Submodules"
-          git push
+          git add Common_submodule_test
+          git diff --cached --quiet || git commit -m "Update submodule reference"
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
